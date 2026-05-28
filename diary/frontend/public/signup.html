@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Social Diary Sign Up</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.25rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --space-10: 2.5rem;
+      --space-12: 3rem;
+      --radius-sm: 0.375rem;
+      --radius-md: 0.75rem;
+      --radius-lg: 1rem;
+      --radius-xl: 1.25rem;
+      --font-body: 'Inter', system-ui, sans-serif;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --color-bg: #09101d;
+      --color-surface: #0f1727;
+      --color-surface-2: #162236;
+      --color-surface-3: #1a2840;
+      --color-border: rgba(205, 220, 255, 0.12);
+      --color-border-strong: rgba(205, 220, 255, 0.22);
+      --color-text: #eef3ff;
+      --color-text-muted: #b2bcd7;
+      --color-text-faint: #75819e;
+      --color-primary: #9eb4d8;
+      --color-primary-strong: #c0d0ee;
+      --color-accent: #7880a7;
+      --color-accent-soft: rgba(120, 128, 167, 0.12);
+      --color-success: #91b59b;
+      --shadow-sm: 0 10px 30px rgba(2, 6, 17, 0.24);
+      --shadow-lg: 0 24px 80px rgba(1, 5, 16, 0.52);
+      --glow: 0 0 0 1px rgba(182, 199, 234, 0.08), 0 0 32px rgba(120, 144, 196, 0.12);
+      --transition-interactive: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; color-scheme: dark; }
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: 1.55;
+      color: var(--color-text);
+      background:
+        radial-gradient(circle at top left, rgba(120, 128, 167, 0.16), transparent 28%),
+        radial-gradient(circle at 82% 20%, rgba(158, 180, 216, 0.08), transparent 20%),
+        linear-gradient(180deg, #0a1221 0%, #080d18 100%);
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 120px 120px;
+      mask-image: radial-gradient(circle at center, black 42%, transparent 88%);
+      opacity: 0.16;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;
+    }
+    .page {
+      min-height: 100dvh;
+      display: grid;
+      grid-template-columns: minmax(390px, 500px) 1fr;
+    }
+    .auth-pane {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(1rem, 3vw, 2rem);
+    }
+    .auth-shell {
+      width: min(100%, 460px);
+      border: 1px solid var(--color-border);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(19, 28, 44, 0.95), rgba(9, 15, 25, 0.98));
+      box-shadow: var(--shadow-lg), var(--glow);
+      backdrop-filter: blur(14px);
+      padding: clamp(1.35rem, 2vw + 1rem, 2.25rem);
+    }
+    .eyebrow {
+      color: var(--color-primary);
+      font-size: var(--text-xs);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .auth-header {
+      display: grid;
+      gap: var(--space-3);
+      margin-bottom: var(--space-6);
+    }
+    .auth-title {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2.1rem, 2vw + 1.2rem, 2.9rem);
+      line-height: 0.95;
+      font-weight: 600;
+    }
+    .auth-subtitle {
+      margin: 0;
+      color: var(--color-text-muted);
+      font-size: var(--text-sm);
+      max-width: 40ch;
+    }
+    .auth-form { display: grid; gap: var(--space-5); }
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+    }
+    .field { display: grid; gap: var(--space-2); }
+    .field label {
+      font-size: var(--text-sm);
+      color: var(--color-text);
+      font-weight: 500;
+    }
+    .input-wrap { position: relative; }
+    .input-wrap svg {
+      position: absolute;
+      left: 0.95rem;
+      top: 50%;
+      translate: 0 -50%;
+      width: 18px;
+      height: 18px;
+      color: var(--color-text-faint);
+      pointer-events: none;
+    }
+    .field input {
+      width: 100%;
+      min-height: 52px;
+      border-radius: 16px;
+      border: 1px solid var(--color-border);
+      background: rgba(255,255,255,0.03);
+      padding: 0.95rem 1rem 0.95rem 2.9rem;
+      color: var(--color-text);
+      outline: none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+    .field input::placeholder { color: var(--color-text-faint); }
+    .field input:focus {
+      border-color: rgba(192, 208, 238, 0.4);
+      box-shadow: 0 0 0 4px rgba(158, 180, 216, 0.1), var(--glow);
+    }
+    .helper {
+      color: var(--color-text-faint);
+      font-size: var(--text-xs);
+      line-height: 1.45;
+    }
+    .password-strength {
+      display: grid;
+      gap: var(--space-2);
+    }
+    .strength-bar {
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      overflow: hidden;
+    }
+    .strength-fill {
+      width: 64%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, rgba(145, 181, 155, 0.7), rgba(192, 208, 238, 0.8));
+      box-shadow: 0 0 18px rgba(192, 208, 238, 0.18);
+    }
+    .requirements {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+    .requirement {
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      border: 1px solid var(--color-border);
+      background: rgba(255,255,255,0.03);
+      color: var(--color-text-muted);
+      font-size: var(--text-xs);
+    }
+    .checkboxes {
+      display: grid;
+      gap: var(--space-3);
+      color: var(--color-text-muted);
+      font-size: var(--text-sm);
+    }
+    .checkbox {
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      cursor: pointer;
+    }
+    .checkbox input {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      margin: 0.1rem 0 0;
+      border-radius: 6px;
+      border: 1px solid var(--color-border-strong);
+      background: rgba(255,255,255,0.03);
+      display: grid;
+      place-items: center;
+      min-height: 18px;
+      padding: 0;
+      flex: 0 0 auto;
+    }
+    .checkbox input:checked {
+      background: rgba(158, 180, 216, 0.18);
+      border-color: rgba(192, 208, 238, 0.5);
+    }
+    .checkbox input:checked::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 3px;
+      background: var(--color-primary-strong);
+      box-shadow: 0 0 10px rgba(192, 208, 238, 0.35);
+    }
+    .text-link { color: var(--color-primary-strong); }
+    .primary-btn {
+      min-height: 54px;
+      border: 1px solid rgba(192, 208, 238, 0.24);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(158, 180, 216, 0.2), rgba(120, 128, 167, 0.18));
+      color: var(--color-text);
+      font-weight: 600;
+      box-shadow: var(--glow);
+      cursor: pointer;
+    }
+    .primary-btn:hover,
+    .primary-btn:focus-visible {
+      transform: translateY(-1px);
+      background: linear-gradient(180deg, rgba(171, 192, 228, 0.22), rgba(130, 141, 180, 0.2));
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      color: var(--color-text-faint);
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: var(--space-1) 0;
+    }
+    .divider::before, .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--color-border);
+    }
+    .secondary-btn {
+      min-height: 50px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-3);
+      border-radius: 16px;
+      border: 1px solid var(--color-border);
+      background: rgba(255,255,255,0.02);
+      color: var(--color-text-muted);
+      cursor: pointer;
+    }
+    .secondary-btn:hover {
+      border-color: var(--color-border-strong);
+      color: var(--color-text);
+      background: rgba(255,255,255,0.04);
+    }
+    .auth-footer {
+      margin-top: var(--space-5);
+      display: flex;
+      justify-content: center;
+      gap: var(--space-2);
+      color: var(--color-text-muted);
+      font-size: var(--text-sm);
+      flex-wrap: wrap;
+    }
+    .story-pane {
+      padding: clamp(1.5rem, 4vw, 4rem);
+      display: flex;
+      align-items: stretch;
+    }
+    .story-card {
+      position: relative;
+      width: 100%;
+      border-radius: 30px;
+      border: 1px solid var(--color-border);
+      background: linear-gradient(180deg, rgba(16, 24, 39, 0.94), rgba(10, 16, 27, 0.96));
+      box-shadow: var(--shadow-lg);
+      padding: clamp(1.5rem, 3vw, 3rem);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: var(--space-8);
+      overflow: hidden;
+    }
+    .story-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 24% 22%, rgba(192, 208, 238, 0.1), transparent 0 20%),
+        radial-gradient(circle at 76% 72%, rgba(120, 128, 167, 0.12), transparent 0 22%);
+      z-index: 0;
+      opacity: 0.8;
+    }
+    .story-card > * { position: relative; z-index: 1; }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-4);
+    }
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-size: var(--text-sm);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      border: 1px solid var(--color-border-strong);
+      background: linear-gradient(180deg, rgba(158, 180, 216, 0.15), rgba(120, 128, 167, 0.08));
+      display: grid;
+      place-items: center;
+      box-shadow: var(--glow);
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid var(--color-border);
+      background: rgba(255,255,255,0.03);
+      color: var(--color-text-muted);
+      font-size: var(--text-xs);
+    }
+    .status-pill::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #c0d0ee;
+      box-shadow: 0 0 12px rgba(192, 208, 238, 0.5);
+    }
+    .story-content {
+      display: grid;
+      align-content: center;
+      gap: var(--space-6);
+      max-width: 44rem;
+    }
+    .story-title {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 5vw, 5.1rem);
+      line-height: 0.96;
+      font-weight: 600;
+      max-width: 10ch;
+      letter-spacing: -0.02em;
+    }
+    .story-copy {
+      margin: 0;
+      max-width: 58ch;
+      color: var(--color-text-muted);
+    }
+    .manifesto {
+      display: grid;
+      gap: var(--space-4);
+      max-width: 38rem;
+    }
+    .manifest-row {
+      display: grid;
+      grid-template-columns: 88px 1fr;
+      gap: var(--space-4);
+      align-items: start;
+      padding: var(--space-4);
+      border-radius: 20px;
+      border: 1px solid var(--color-border);
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(8px);
+    }
+    .manifest-label {
+      color: var(--color-primary);
+      font-size: var(--text-xs);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding-top: 0.15rem;
+    }
+    .manifest-text {
+      color: var(--color-text-muted);
+      font-size: var(--text-sm);
+    }
+    .manifest-text strong { color: var(--color-text); font-weight: 600; }
+    .foot-note {
+      display: flex;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+    .chip {
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid var(--color-border);
+      background: rgba(158, 180, 216, 0.07);
+      color: var(--color-text-muted);
+      font-size: var(--text-xs);
+    }
+    .mobile-context {
+      display: none;
+      margin-bottom: var(--space-5);
+      padding: var(--space-4);
+      border-radius: 18px;
+      border: 1px solid var(--color-border);
+      background: rgba(255,255,255,0.02);
+    }
+    .mobile-context h2 {
+      margin: 0 0 var(--space-2) 0;
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 600;
+    }
+    .mobile-context p {
+      margin: 0;
+      color: var(--color-text-muted);
+      font-size: var(--text-sm);
+    }
+    @media (max-width: 1060px) {
+      .page { grid-template-columns: 1fr; }
+      .story-pane { display: none; }
+      .mobile-context { display: block; }
+    }
+    @media (max-width: 560px) {
+      .auth-pane { padding: 0.9rem; }
+      .auth-shell { border-radius: 24px; padding: 1.2rem; }
+      .field-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="sr-only" href="#main">Skip to content</a>
+  <div class="page">
+    <main id="main" class="auth-pane">
+      <section class="auth-shell" aria-labelledby="signup-title">
+        <div class="mobile-context">
+          <h2>Night Archive</h2>
+          <p>Create an account for a calmer social journal where topics and continuations stay readable.</p>
+        </div>
+
+        <header class="auth-header">
+          <div class="eyebrow">Create account</div>
+          <h1 id="signup-title" class="auth-title">Start your place in the archive.</h1>
+          <p class="auth-subtitle">Choose a name, secure your account, and begin publishing thoughts as topics or connected branches.</p>
+        </header>
+
+        <form class="auth-form">
+          <div class="field-grid">
+            <div class="field">
+              <label for="first-name">First name</label>
+              <div class="input-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                  <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"></path>
+                  <path d="M5 20a7 7 0 0 1 14 0"></path>
+                </svg>
+                <input id="first-name" name="first-name" type="text" placeholder="Ayla" autocomplete="given-name" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="username">Username</label>
+              <div class="input-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                  <path d="M4 6h16v12H4z"></path>
+                  <path d="M8 10h8M8 14h5"></path>
+                </svg>
+                <input id="username" name="username" type="text" placeholder="nightnotes" autocomplete="username" />
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                <path d="M4 6h16v12H4z"></path>
+                <path d="m4 7 8 6 8-6"></path>
+              </svg>
+              <input id="email" name="email" type="email" placeholder="you@archive.app" autocomplete="email" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                <rect x="4" y="11" width="16" height="9" rx="2"></rect>
+                <path d="M8 11V8a4 4 0 1 1 8 0v3"></path>
+              </svg>
+              <input id="password" name="password" type="password" placeholder="Create a strong password" autocomplete="new-password" />
+            </div>
+            <div class="password-strength">
+              <div class="strength-bar" aria-hidden="true"><div class="strength-fill"></div></div>
+              <div class="requirements">
+                <span class="requirement">12+ characters</span>
+                <span class="requirement">Upper & lower case</span>
+                <span class="requirement">One symbol</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="confirm-password">Confirm password</label>
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <input id="confirm-password" name="confirm-password" type="password" placeholder="Repeat your password" autocomplete="new-password" />
+            </div>
+            <div class="helper">Password confirmation is shown as a separate field for clarity, while allowing password managers and paste support.</div>
+          </div>
+
+          <div class="checkboxes">
+            <label class="checkbox" for="updates">
+              <input id="updates" type="checkbox" name="updates" checked>
+              <span>Send occasional product updates and notable writing prompts.</span>
+            </label>
+            <label class="checkbox" for="terms">
+              <input id="terms" type="checkbox" name="terms">
+              <span>I agree to the <a class="text-link" href="#">Terms</a> and <a class="text-link" href="#">Privacy Policy</a>.</span>
+            </label>
+          </div>
+
+          <button class="primary-btn" type="submit">Create account</button>
+
+          <div class="divider">or continue with</div>
+
+          <button class="secondary-btn" type="button">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.8 10.2h-9.6v3.6h5.5c-.2 1.3-1.6 3.8-5.5 3.8-3.3 0-6-2.7-6-6s2.7-6 6-6c1.9 0 3.2.8 4 1.5l2.7-2.6C17.2 2.9 15 2 12.2 2 6.6 2 2 6.6 2 12.2s4.6 10.2 10.2 10.2c5.9 0 9.8-4.1 9.8-9.9 0-.7-.1-1.3-.2-1.9Z"/></svg>
+            Sign up with Google
+          </button>
+        </form>
+
+        <footer class="auth-footer">
+          <span>Already have an account?</span>
+          <a class="text-link" href="#">Sign in</a>
+        </footer>
+      </section>
+    </main>
+
+  </div>
+</body>
+</html>
