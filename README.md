@@ -6,53 +6,53 @@
 ## Установка
 
 1. Клонируйте репозиторий:
-`ash
-git clone <your-repo-url>
+`bash
+git clone https://github.com/Gosha-Horosha/khoroshcha-diplom
 cd my_project
-`ash
+`bash
 
 2. Создайте виртуальное окружение:
-`ash
+`bash
 python -m venv venv
-`ash
+`bash
 
 3. Активируйте виртуальное окружение:
 
 **Windows:**
-`ash
+`bash
 venv\Scripts\activate
-`ash
+`bash
 
 **macOS/Linux:**
-`ash
+`bash
 source venv/bin/activate
-`ash
+`bash
 
 4. Установите зависимости:
-`ash
+`bash
 pip install -r requirements.txt
-`ash
+`bash
 
 5. Скопируйте файл окружения:
-`ash
+`bash
 cp .env.example .env
-`ash
+`bash
 
 ## Запуск
 
-`ash
+`bash
 python src/main.py
-`ash
+`bash
 
 ## Тестирование
 
-`ash
+`bash
 pytest tests/
-`ash
+`bash
 
 ## Структура проекта
 
-`ash
+`bash
 my_project/
 ├── src/                 # Исходный код
 │   ├── __init__.py
@@ -67,4 +67,4 @@ my_project/
 ├── .env.example        # Пример переменных окружения
 ├── .gitignore         # Git ignore файл
 └── README.md          # Этот файл
-`ash
+`bash
