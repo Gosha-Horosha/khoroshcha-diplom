@@ -4,8 +4,8 @@ from datetime import datetime
 from typing import Optional
 
 
-from sqlalchemy import String, Text, DateTime, CheckConstraint, ForeignKey, Boolean, Enum
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy import String, Text, DateTime, CheckConstraint, ForeignKey, Boolean, Enum, UniqueConstraint, Computed
+from sqlalchemy.dialects.postgresql import UUID, JSONB, TSVECTOR
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.orm import DeclarativeBase
 
@@ -42,6 +42,7 @@ class User(Base):
     username: Mapped[str] = mapped_column(String(255), nullable=False)
     password_hash: Mapped[str] = mapped_column(Text, nullable=False)
     role: Mapped[str] = mapped_column(String(20), default="user", nullable=False)
+    is_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
@@ -91,6 +92,35 @@ class Post(Base):
 
     content_json: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
 
+    # Полнотекстовый индекс (генерируемая колонка в БД, см. миграцию 003).
+    # Computed → SQLAlchemy не пытается её вставлять/обновлять.
+    search_vector: Mapped[Optional[str]] = mapped_column(
+        TSVECTOR,
+        Computed(
+            "to_tsvector('russian', "
+            "coalesce(display_name, '') || ' ' || "
+            "coalesce(content_json->>'title', '') || ' ' || "
+            "coalesce(content_json->>'text', '') || ' ' || "
+            "coalesce(content_json->>'topic', ''))",
+            persisted=True,
+        ),
+        nullable=True,
+    )
+
+    # Текст для нечёткого (trigram / pg_trgm) поиска — см. миграцию 004.
+    search_text: Mapped[Optional[str]] = mapped_column(
+        Text,
+        Computed(
+            "lower("
+            "coalesce(display_name, '') || ' ' || "
+            "coalesce(content_json->>'title', '') || ' ' || "
+            "coalesce(content_json->>'text', '') || ' ' || "
+            "coalesce(content_json->>'topic', ''))",
+            persisted=True,
+        ),
+        nullable=True,
+    )
+
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
@@ -125,3 +155,29 @@ class Friendship(Base):
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+
+class Favorite(Base):
+    __tablename__ = "favorites"
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "post_id", name="favorites_user_post_unique"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+
+    post_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("posts.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)

@@ -1,0 +1,198 @@
+/* Reset / base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--color-text);
+  background: radial-gradient(circle at top, #1f2937 0, #020617 48%, #000 100%);
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Утилита для скрытой ссылки "Перейти к содержимому" */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Общая сетка приложения (оборачиваем в .app-shell в Vue) */
+.app-shell {
+  min-height: 100vh;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-4);
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(--rightbar-width);
+  gap: var(--space-4);
+}
+
+/* Общая карточка / панель */
+.panel {
+  border-radius: 24px;
+  border: 1px solid var(--color-border);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(2, 6, 23, 0.98));
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(16px);
+}
+
+/* Заголовки и мелкие метки */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  margin: 0 0 0.4rem;
+}
+
+p {
+  margin: 0 0 0.75rem;
+}
+
+.eyebrow {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-text-faint);
+  margin-bottom: 0.3rem;
+}
+
+/* Чипы / маленькие кнопки */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-soft);
+  background: rgba(15, 23, 42, 0.8);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  transition: background var(--transition-interactive), border-color var(--transition-interactive), color var(--transition-interactive), box-shadow var(--transition-interactive);
+}
+
+.chip:hover {
+  background: rgba(30, 64, 175, 0.35);
+  border-color: rgba(129, 140, 248, 0.6);
+  color: var(--color-text);
+}
+
+.chip-active,
+.chip.active {
+  background: var(--color-accent-soft);
+  border-color: rgba(129, 140, 248, 0.85);
+  color: var(--color-text);
+  box-shadow: var(--glow);
+}
+
+/* Небольшие inline-кнопки */
+.inline-btn,
+.ghost-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-soft);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  background: rgba(15, 23, 42, 0.8);
+  transition: background var(--transition-interactive), border-color var(--transition-interactive), color var(--transition-interactive);
+}
+
+.inline-btn:hover,
+.ghost-btn:hover {
+  background: rgba(30, 64, 175, 0.35);
+  border-color: rgba(129, 140, 248, 0.7);
+  color: var(--color-text);
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-soft);
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--color-text-muted);
+  transition: background var(--transition-interactive), border-color var(--transition-interactive), color var(--transition-interactive);
+}
+
+.icon-btn:hover {
+  background: rgba(30, 64, 175, 0.4);
+  border-color: rgba(129, 140, 248, 0.8);
+  color: var(--color-text);
+}
+
+/* Бейджи-счётчики */
+.badge-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.6rem;
+  padding: 0 0.4rem;
+  border-radius: 999px;
+  font-size: var(--text-xs);
+  background: rgba(15, 23, 42, 0.98);
+  border: 1px solid var(--color-border-soft);
+  color: var(--color-text-muted);
+}
+
+/* Медиа для мобильной сетки */
+@media (max-width: 1080px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+    padding: var(--space-3);
+    padding-bottom: 5.5rem;
+  }
+}

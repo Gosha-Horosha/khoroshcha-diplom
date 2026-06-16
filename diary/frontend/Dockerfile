@@ -1,32 +1,22 @@
-FROM node:18-alpine
+# syntax=docker/dockerfile:1.7
+
+FROM node:18-alpine AS build
 
 WORKDIR /app
 
-# Копируем package.json и package-lock.json
 COPY package*.json ./
+RUN --mount=type=cache,target=/root/.npm npm install
 
-# Устанавливаем зависимости
-RUN npm install
-
-# Копируем исходный код
 COPY . .
-
-# Собираем приложение
 RUN npm run build
 
-# Устанавливаем nginx для обслуживания статических файлов
-FROM nginx:alpine
+FROM nginx:1.27-alpine
 
-COPY public/ /usr/share/nginx/html/
-
-## Копируем собранное приложение в nginx
-#COPY --from=0 /app/dist /usr/share/nginx/html
-
-# Копируем конфигурацию nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist /usr/share/nginx/html
 
-# Открываем порт
 EXPOSE 80
 
-# Запускаем nginx
+HEALTHCHECK CMD wget -qO- http://localhost/ || exit 1
+
 CMD ["nginx", "-g", "daemon off;"]

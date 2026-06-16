@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings
-from typing import List
+from typing import List, Optional
 
 
 class Settings(BaseSettings):
@@ -16,7 +16,18 @@ class Settings(BaseSettings):
     
     # Application
     DEBUG: bool = True
-    
+
+    SMTP_HOST: Optional[str] = "smtp.mail.ru"
+    SMTP_PORT: int = 587
+    SMTP_USERNAME: Optional[str] = "archive_mose@mail.ru"
+    SMTP_PASSWORD: Optional[str] = "av7P3Q4XUuo93dYPf1gI"
+    SMTP_FROM_EMAIL: Optional[str] = None
+
+    FRONTEND_URL: str = "http://localhost:3000"
+    PASSWORD_RESET_EXPIRE_MINUTES: int = 30
+    EMAIL_VERIFY_EXPIRE_MINUTES: int = 1440  # 24 часа
+
+
     class Config:
         env_file = ".env"
 
