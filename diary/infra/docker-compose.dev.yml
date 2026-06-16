@@ -1,0 +1,32 @@
+services:
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql://postgres:eight2004@host.docker.internal:5432/postgres
+      SECRET_KEY: gerryndiy
+      DEBUG: "true"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../backend:/app
+    # --reload следит за изменениями в .py файлах — перезапускает uvicorn автоматически
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --reload-dir /app/app
+
+  frontend:
+    # Используем nginx напрямую — без стадии сборки (фронт статичный)
+    image: nginx:1.27-alpine
+    ports:
+      - "3000:80"
+    volumes:
+      # Монтируем static-файлы напрямую — любые изменения видны сразу
+      - ../frontend/public:/usr/share/nginx/html:ro
+      - ../frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - backend
+
+#  redis:
+#    image: redis:7-alpine
+#    ports:
+#      - "6379:6379"

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Archive · Профиль</title>
+
+  <!-- Шрифты -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- Стили (физически лежат в frontend/public/styles/) -->
+  <link rel="stylesheet" href="./styles/tokens.css">
+  <link rel="stylesheet" href="./styles/base.css">
+  <link rel="stylesheet" href="./styles/dashboard.css">
+</head>
+<body>
+  <a href="#main" class="sr-only">Перейти к содержимому</a>
+
+  <!-- Vue-приложение монтируется сюда -->
+  <div id="app"></div>
+
+  <!-- Vue через ESM -->
+  <script type="importmap">
+  {
+    "imports": {
+      "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+    }
+  }
+  </script>
+
+  <!-- Конфиг API и Vue-страница профиля (физически в frontend/public/js/...) -->
+  <script type="module" src="./js/config.js"></script>
+  <script type="module" src="./js/profile/app.js"></script>
+</body>
+</html>
