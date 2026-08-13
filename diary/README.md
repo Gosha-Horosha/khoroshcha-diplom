@@ -76,7 +76,7 @@ diary-app/
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/Gosha-Horosha/khoroshcha-diplom.git
 cd diary
 ```
 
@@ -199,18 +199,5 @@ The application can be deployed to cloud platforms like:
 - Heroku
 - DigitalOcean
 
-## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Support
-
-For support and questions, please open an issue in the repository or contact the development team.
